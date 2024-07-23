@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP and Latency Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IP and Latency Checker</h1>
+        <p>Your IP: <span id="ip"></span></p>
+        <p>Latency: <span id="latency"></span> ms</p>
+    </div>
+    <script>
+        async function fetchData() {
+            const start = Date.now();
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            const latency = Date.now() - start;
+            document.getElementById('ip').textContent = data.ip;
+            document.getElementById('latency').textContent = latency;
+        }
+        fetchData();
+    </script>
+</body>
+</html>
