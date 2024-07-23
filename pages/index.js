@@ -8,12 +8,16 @@ export default function Home() {
 
     useEffect(() => {
         async function fetchData() {
-            const start = Date.now();
-            const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN;
-            const response = await fetch(`https://ipinfo.io/json?token=${token}`);
-            const data = await response.json();
-            setLatency(Date.now() - start);
-            setData(data);
+            try {
+                const start = Date.now();
+                const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN;
+                const response = await fetch(`https://ipinfo.io/json?token=${token}`);
+                const data = await response.json();
+                setLatency(Date.now() - start);
+                setData(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
 
         fetchData();
@@ -31,6 +35,8 @@ export default function Home() {
             <p>City: <span>{data.city}</span></p>
             <p>Region (State): <span>{data.region}</span></p>
             <p>Country: <span>{data.country}</span></p>
+            <p>Location: <span>{data.loc}</span></p>
+            <p>ASN & Organization: <span>{data.org}</span></p>
             <p>Postal Code: <span>{data.postal}</span></p>
             <p>Timezone: <span>{data.timezone}</span></p>
             <p>Language: <span>{language}</span></p>
