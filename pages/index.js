@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 export default function Home() {
     const [data, setData] = useState({});
     const [latency, setLatency] = useState(null);
+    const [userAgent, setUserAgent] = useState('');
+    const [language, setLanguage] = useState('');
 
     useEffect(() => {
         async function fetchData() {
             const start = Date.now();
-            const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN; // 使用环境变量
+            const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN;
             const response = await fetch(`https://ipinfo.io/json?token=${token}`);
             const data = await response.json();
             setLatency(Date.now() - start);
@@ -15,6 +17,11 @@ export default function Home() {
         }
 
         fetchData();
+
+        if (typeof navigator !== 'undefined') {
+            setUserAgent(navigator.userAgent);
+            setLanguage(navigator.language || navigator.userLanguage);
+        }
     }, []);
 
     return (
@@ -26,8 +33,8 @@ export default function Home() {
             <p>Country: <span>{data.country}</span></p>
             <p>Postal Code: <span>{data.postal}</span></p>
             <p>Timezone: <span>{data.timezone}</span></p>
-            <p>Language: <span>{navigator.language || navigator.userLanguage}</span></p>
-            <p>User Agent: <span>{navigator.userAgent}</span></p>
+            <p>Language: <span>{language}</span></p>
+            <p>User Agent: <span>{userAgent}</span></p>
             <p>Latency: <span>{latency} ms</span></p>
         </div>
     );
